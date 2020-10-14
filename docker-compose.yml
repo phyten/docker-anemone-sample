@@ -1,0 +1,46 @@
+version: '3'
+services:
+  base: &app_base
+    build: "."
+    stdin_open: true
+    tty: true
+    environment:
+      BUNDLE_APP_CONFIG: ./.bundle
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - .:/app
+      - bundle:/app/vendor/bundle
+    depends_on:
+      - mysql
+      - redis
+
+  installer:
+    <<: *app_base
+    command: bundle install
+
+  app:
+    <<: *app_base
+    restart: always
+
+  mysql:
+    restart: always
+    image: mysql:5.7
+    ports:
+      - $DB_PORT:3306
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+
+  redis:
+    restart: always
+    image: redis:3.2.11
+    environment:
+      TZ: Asia/Tokyo
+    ports:
+      - $REDIS_PORT:6379
+    command: redis-server --appendonly yes
+
+volumes:
+  bundle:
+  db_data:

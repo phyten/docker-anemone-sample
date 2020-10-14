@@ -1,0 +1,32 @@
+version: '4'
+
+environment:
+  RAILS_ENV: development
+
+compose:
+  files:
+    - docker-compose.yml
+
+interaction:
+  sh:
+    description: Open the app container bash shell
+    service: app
+    command: /bin/bash
+    compose_run_options: [no-deps]
+
+  bundle:
+    description: Run bundler command
+    service: app
+    command: bundle
+    compose_run_options: [no-deps]
+
+  ruby:
+    description: ruby
+    service: app
+    command: bundle exec ruby
+    compose_run_options: [no-deps]
+
+# mysql and redis stands up, and bundle install
+provision:
+  - dip compose run --rm installer bundle install
+  - dip up mysql redis

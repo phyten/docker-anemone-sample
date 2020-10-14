@@ -1,0 +1,29 @@
+* Docker Anemone Sample
+** preparation
+*** clone
+#+begin_src bash
+git clone git@github.com:phyten/docker-anemone-sample.git your-setting-name
+#+end_src
+
+*** make and modify .env
+#+begin_src bash
+touch .env
+#+end_src
+
+#+begin_src
+COMPOSE_PROJECT_NAME=your-setting-project-name
+#+end_src
+
+** usage
+
+*** provision
+- start mysql and redis
+- bundle install
+#+begin_src
+dip provision
+#+end_src
+
+*** start
+#+begin_src bash
+dip ruby crawler.rb
+#+end_src
